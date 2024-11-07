@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: microservice_admin
+    ports:
+      - "3309:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+    ports:
+      - "8056:8056"
+    depends_on:
+      - db
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: db 
+      DB_PORT: 3306
+      DB_DATABASE: microservice_admin
+      DB_USERNAME: root
+      DB_PASSWORD: ""
+    volumes:
+      - .:/var/www/html
+
+volumes:
+  dbdata: {}
