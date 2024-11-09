@@ -8,23 +8,31 @@ services:
       - "3309:3306"
     volumes:
       - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   app:
     build:
       context: .
     ports:
-      - "8056:8056"
+      -  "8000:8000"
     depends_on:
       - db
     environment:
       DB_CONNECTION: mysql
-      DB_HOST: db 
+      DB_HOST: db
       DB_PORT: 3306
       DB_DATABASE: microservice_admin
       DB_USERNAME: root
       DB_PASSWORD: ""
     volumes:
-      - .:/var/www/html
+      - .:/app  # ربط المجلد الجذري للمشروع مع الحاوية
+      - ./storage:/app/storage  # تأكد من أن مجلد الـ storage مرتبط أيضًا
+      - ./vendor:/app/vendor  # ربط مجلد الـ vendor أيضًا إذا كنت تستخدمه
 
 volumes:
   dbdata: {}
