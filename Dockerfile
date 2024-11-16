@@ -15,5 +15,6 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 COPY . .
 RUN composer install
+RUN docker-php-ext-install sockets
 CMD php artisan serve --host=0.0.0.0 --port=8000
 
