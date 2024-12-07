@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProductCreated;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -23,6 +24,7 @@ class ProductController extends Controller
             'likes' => 'required'
         ]);
         Product::create($product);
+        ProductCreated::dispatch($product->toArray());
         return response()->json([
             'success' => true,
             'message' => 'Product created successfully',
